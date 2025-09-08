@@ -1,0 +1,117 @@
+
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 10px;
+}
+.header {
+  padding: 1px;
+  text-align: center;
+}
+.loginscreen {
+  position: fixed;
+  /*top: 50%;*/
+  min-width: 40%;
+  max-width: 50%;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+.topnav {
+  overflow: hidden;
+}
+.topnav a {
+  float: left;
+  display: block;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.leftcolumn {   
+  float: left;
+  width: 75%;
+}
+.rightcolumn {
+  float: left;
+  width: 25%;
+  padding-left: 20px;
+}
+
+.rightcolumn h2 {
+  padding: 14px 16px;
+}
+
+.rightcolumnlinks {
+  display: block;
+  width: 100%;
+  padding: 14px 16px;
+}
+
+.smallrightcolumnlinks {
+  display: block;
+  width: 33%;
+  padding: 5px 5px;
+
+}
+
+.content, .infocontent {
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.footer {
+  padding: 1px;
+  text-align: left;
+}
+
+@media screen and (max-width: 800px) {
+  .leftcolumn, .rightcolumn {   
+    width: 100%;
+    padding: 0;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .topnav a {
+    float: none;
+    width: 100%;
+    text-align: left;
+  }
+}
+
+.footertexts {
+  overflow: hidden;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.logiframe, .databaseframe, .settingsframe {
+  width: 100%;
+  border:none;
+}
+
+.databaseframe {
+  height: 500px;
+}
+
+.settingsframe {
+  height: 350px;
+}
+
+.loggerframe {
+  width: 100%;
+  height: 100%;
+}
+
+.commander {
+  padding: 5px;
+  width: 100%; 
+}

@@ -1,0 +1,63 @@
+<!-- 
+|==============================================================|
+Made by IntSPstudio
+Version: 0.0.0.1
+ID: 220003001
+|==============================================================|
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Logger</title>
+  <link rel="stylesheet" type="text/css" href="resources/css/main.css">
+  <link rel="stylesheet" type="text/css" href="resources/css/defaultcolor.css">
+</head>
+<body>
+  <div class="header">
+    <h1>1NTdb</h1>
+  </div>
+  <div class="topnav">
+    <a href="index.html">Index</a>
+    <a href="reports.html">Reports</a>
+    <a href="forms.html">Forms</a>
+    <a href="querys.html">Querys</a>
+    <a href="settings.html" style="float:right">Settings</a>
+    <a href="search.html" style="float:right">Search</a>
+    <a href="logger.html" style="float:right">Logger</a>
+  </div>
+  <div class="row">
+    <div class="leftcolumn">
+      <div class="content">
+        <h3>Info</h3>
+        <p>One of the important features is to write down data quickly. For example, through this and process that data later thru forms and queries.</p>
+      </div>
+      <div class="content" style="white-space:unset; height: 400px;">
+        <iframe id="contentframe" class="loggerframe" src="subhtml/logger/mainmenu.html" frameborder="0">
+        </iframe>
+      </div>
+    </div>
+    <div class="rightcolumn">
+      <div class="content">
+        <h2>Menu</h2>
+        <a href="javascript:pageurl('subhtml/logger/mainmenu.html')" class="rightcolumnlinks">Main</a>
+        <a href="javascript:pageurl('subhtml/logger/taskmenu.html')" class="rightcolumnlinks">Task</a>
+        <a href="javascript:pageurl('subhtml/logger/listmenu.html')" class="rightcolumnlinks">List</a>
+        <a href="javascript:pageurl('subhtml/logger/notemenu.html')" class="rightcolumnlinks">Note</a>
+      </div>
+    </div>
+  </div>
+  <p></p>
+  <div class="commander">
+    <label for="index_cmd_label"><b>Command</b></label>
+    <input type="text" placeholder="//" name="index_cmd">
+    <button type="submit"><a href="#">Enter</a></button>
+  </div>
+  <p></p>
+  <div class="footer">
+    <div class="footertexts">
+      <p style="float: left;">Last login: ...</p>
+      <p style="float: right;"><a href="inen.html">Log Out</a></p>
+  </div>
+</body>
+</html>

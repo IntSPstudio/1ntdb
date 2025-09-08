@@ -1,0 +1,25 @@
+.topnav {
+  color: white;
+  background-color: #20416c;
+}
+.content a {
+  color: white;
+  background-color: #20416c;
+}
+.basictable th {
+  background-color: #f1f1f1;
+}
+.basictable a {
+  color: white
+}
+.basictable a:hover, content a:hover {
+  color: #FF8000
+}
+.tablesheets table, .tablesheets th, .tablesheets td {
+  background-color: #20416c;
+  color: white;
+}
+.tablesheets td, .tablesheets tr {
+  background-color: white;
+  color: black;
+}

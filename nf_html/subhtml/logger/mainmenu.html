@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Main menu</title>
+  <link rel="stylesheet" type="text/css" href="../../resources/css/subc.css">
+  <link rel="stylesheet" type="text/css" href="../../resources/css/subccolor.css">
+</head>
+<body>
+  <div class="topnav">
+    <h2>Main</h2>
+  </div>
+  <div class="content">
+    <table style="text-align: left;">
+      <tr>
+        <th><label for="loggroup"><b>Group</b></label></th>
+        <th><input type="text" placeholder="Event group" name="loggroup"></th>
+      </tr>
+      <tr>
+        <th><label for="tid"><b>Target</b></label></th>
+        <th><input type="text" placeholder="Enter id or group" name="tid"></th>
+      </tr>
+      <tr>
+        <th><label for="did"><b>Destination</b></label></th>
+        <th><input type="text" placeholder="Enter id or group" name="did"></th>
+      </tr>
+    </table>
+  </div>
+  <div class="content">
+    <label for="logcontent"><b>Event</b></label>
+    <br>
+    <!--<textarea id="text" class ="largeinputfield" name="text" rows="3" cols="10"></textarea>-->
+    <textarea id="text" class ="largeinputfield" name="text" maxlength="128"></textarea>
+  </div>
+  <p id="datetime" style="text-align: right;"></p>
+  <script src="../../resources/js/currentdatetime.js">
+  </script>
+</body>
+</html>
