@@ -93,7 +93,7 @@ body {
   margin-right: 10px;
 }
 
-.logiframe, .databaseframe, .settingsframe {
+.logiframe, .databaseframe, .settingsframe, .timtraframe {
   width: 100%;
   border:none;
 }
