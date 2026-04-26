@@ -15,8 +15,13 @@ SET default_storage_engine=InnoDB;
 
 CREATE TABLE brands (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    status_id INT DEFAULT 1,
+
     name VARCHAR(150) NOT NULL UNIQUE,
-    info VARCHAR(255)
+    info VARCHAR(255),
+
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 CREATE INDEX idx_brand_name ON brands(name);
 
@@ -25,7 +30,6 @@ CREATE INDEX idx_brand_name ON brands(name);
 
 CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
-
     status_id INT DEFAULT 1,
 
     code VARCHAR(10) UNIQUE,
@@ -48,8 +52,13 @@ CREATE INDEX idx_category_code ON categories(code);
 
 CREATE TABLE units (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    status_id INT DEFAULT 1,
+
     name VARCHAR(20) NOT NULL,
-    symbol VARCHAR(10)
+    symbol VARCHAR(10),
+
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 -- |==============================================================|
@@ -107,8 +116,9 @@ CREATE TABLE product_identifiers (
     type VARCHAR(20),
 
     info TEXT,
-
+    
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     FOREIGN KEY (product_id)
         REFERENCES products(id)

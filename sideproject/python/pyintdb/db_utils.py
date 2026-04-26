@@ -8,13 +8,17 @@
 from contextlib import contextmanager
 from pyintdb.db import get_connection
 
+#MAIN
 @contextmanager
-def db_cursor():
-    conn = get_connection()
+def db_cursor(db_name):
+    conn = get_connection(db_name)
     cursor = conn.cursor(dictionary=True)
     try:
         yield cursor
         conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
     finally:
         cursor.close()
         conn.close()

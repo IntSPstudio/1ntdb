@@ -7,12 +7,24 @@
 
 #SETTINGS
 import sys
-from pyintdb.services.brand_service import get_brands
+from os import get_terminal_size as cli_size
+from pyintdb.services.brand_service import get_all_brands
+from pyintdb.services.brand_service import get_brand_by_id
 from pyintdb.services.brand_service import add_brand
 
-def printer(line):
-    print("=] ",line)
+#CLI PRINTER
+def printer(text):
+    text = "=] " + str(text)
+    try:
+        limit = cli_size().columns #SCREEN SIZE
+        if len(text) > limit:
+            print(text[:limit])
+        else:
+            print(text)
+    except Exception as e:
+        print(f"Error printing object: {e}")
 
+#MAIN LOOP
 if __name__ == "__main__":
     try:
         #
@@ -26,19 +38,29 @@ if __name__ == "__main__":
         # BRAND
         #
         if cmd == "brands":
-            #Index
+            #INDEX
             if len(sys.argv) == 2:
                 printer("            *** OPTIONS ***")
-                printer("all")
+                printer("get")
                 printer("add")
-            #All
-            elif len(sys.argv) == 3:
-                if sys.argv[2] == "all":
-                    for b in get_brands():
-                        print(b)
-            #Add
+            #MAIN
             elif len(sys.argv) > 3:
+                #Add
                 if sys.argv[2] == "add":
-                    add_brand(sys.argv[3])
+                    if len(sys.argv) > 4:
+                        brand = sys.argv[3]
+                        info = sys.argv[4]
+                        result = add_brand(brand, info)
+                    else:
+                        result = add_brand(sys.argv[3])
+                #Get
+                if sys.argv[2] == "get":
+                    input = sys.argv[3]
+                    if input == "all":
+                        for b in get_all_brands():
+                            printer(b)
+                    else:
+                        result = get_brand_by_id(input)
+                        printer(result)
     except:
         sys.exit()
