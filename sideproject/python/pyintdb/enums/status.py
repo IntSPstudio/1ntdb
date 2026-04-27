@@ -5,7 +5,13 @@
 #|==============================================================|#
 
 #GLOBAL DATA STATUS
-class Status:
-    PASSIVE =0
+from enum import IntEnum
+
+class Status(IntEnum):
+    PASSIVE = 0
     ACTIVE = 1
     DELETED = 4
+
+    @classmethod
+    def is_valid(cls, value):
+        return value in cls._value2member_map_

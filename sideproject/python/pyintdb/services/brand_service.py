@@ -9,8 +9,21 @@ from pyintdb.db_utils import db_cursor
 from config import DB_PRODUCTS
 
 #ADD
-def add_brand(name, info=None):
+def create_brand(name, info=None):
     with db_cursor(DB_PRODUCTS) as cursor:
+        #CHECK IF EXISTS
+        cursor.execute(
+            "SELECT id FROM brands WHERE name = %s",
+            (name,)
+        )
+        existing = cursor.fetchone()
+        if existing:
+            return {
+                "success": False,
+                "id": existing["id"],
+                "message": "Brand already exists"
+            }
+        #ADD NEW ONE
         cursor.execute(
             """
             INSERT INTO brands (name, info)
@@ -18,6 +31,25 @@ def add_brand(name, info=None):
             """,
             (name.strip(), info.strip() if info else None)
         )
+        return {
+            "success": True,
+            "id": cursor.lastrowid,
+            "message": "Brand created"
+        }
+#GET OR CREATE
+def get_or_create_brand(name):
+
+    with db_cursor(DB_PRODUCTS) as cursor:
+        cursor.execute("SELECT id FROM brands WHERE name=%s", (name,))
+        
+        row = cursor.fetchone()
+        if row:
+            return row["id"]
+        cursor.execute(
+            "INSERT INTO brands (name) VALUES (%s)",
+            (name,)
+        )
+        return cursor.lastrowid
 #GET ALL
 def get_all_brands():
     with db_cursor(DB_PRODUCTS) as cursor:

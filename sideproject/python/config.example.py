@@ -12,3 +12,10 @@ DB_NAME = ""
 
 #DATABASE NAMES
 DB_PRODUCTS = "products"
+DB_SYSTEM = "system"
+
+#TABLE DATABASE mapping
+TABLE_DATABASE_MAP = {
+    "brands": DB_PRODUCTS,
+    "products": DB_PRODUCTS,
+}
