@@ -11,7 +11,7 @@ FIELD_ALIAS = {
     "brandid": "brand_id",
     "cat": "category_id",
     "parent": "parent_id",
-    "unit": "unit_id",
+    "unitid": "unit_id",
     "man": "manufacturer",
 
     "qty": "qty_value",

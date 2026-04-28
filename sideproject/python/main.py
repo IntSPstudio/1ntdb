@@ -9,7 +9,7 @@
 import sys
 from os import get_terminal_size as cli_size
 from pyintdb.services.brand_service import get_all_brands, get_brand_by_id, create_brand
-from pyintdb.services.product_service import create_product, get_products, get_product
+from pyintdb.services.product_service import get_products, get_product
 
 #CLI PRINTER
 def printer(text):
@@ -63,8 +63,9 @@ if __name__ == "__main__":
                             for b in get_all_brands():
                                 printer(b)
                         else:
-                            result = get_brand_by_id(input)
-                            printer(result)
+                            for key, value in get_brand_by_id(input).items():
+                                output = str(key) +" : "+ str(value)
+                                printer(output)
             #
             # PRODUCTS
             #
@@ -76,17 +77,23 @@ if __name__ == "__main__":
                     printer("create")
                 #MAIN
                 else:
+                    #CREATE PRODUCT WIZARD
+                    if len(sys.argv) == 3:
+                        if sys.argv[2] == "create":
+                            printer("Create product!")
                     #GET ALL DATA
-                    if len(sys.argv) == 4:
+                    elif len(sys.argv) == 4:
                         if sys.argv[2] == "get":
                             if sys.argv[3] == "all":
-                                printer("Get all products")
+                                for b in get_products():
+                                    printer(b)
                     #GET SPECIFIC DATA
                     elif len(sys.argv) == 5:
                         if sys.argv[2] == "get":
                             if sys.argv[3] == "id":
-                                output = "Get product data from table id: "+ str(sys.argv[4])
-                                printer(output)
+                                for key, value in get_product(sys.argv[4]).items():
+                                    output = str(key) +" : "+ str(value)
+                                    printer(output)
                             elif sys.argv[3] == "ref":
                                 output = "Get product data from by reference code: "+ str(sys.argv[4])
                                 printer(output)

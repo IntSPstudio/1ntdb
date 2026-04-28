@@ -5,11 +5,11 @@
 #|==============================================================|#
 
 #SETTINGS
+from config import DB_PRODUCTS
 from pyintdb.db_utils import db_cursor
 from pyintdb.services.brand_service import get_or_create_brand
-from config import DB_PRODUCTS
+from pyintdb.services.unit_service import get_unit_id_by_symbol
 from pyintdb.enums.status import Status
-
 from pyintdb.utils.field_mapper import validate_update_field
 
 #CREATE PRODUCT WITH NO IDENTIFIER
@@ -33,8 +33,11 @@ def create_product(input: dict):
     #FETCHING
     name = data.get("name")
     brand_name = data.get("brand_name")
+    unit_name = data.get("unit_id")
+    if unit_name:
+       unit_name = get_unit_id_by_symbol(unit_name)
+       unit_id = unit_name["id"]
     #category_id = data.get("category_id") LATER
-    #unit_id = data.get("unit_id") LATER
     #NAME CHECK (SQL NOT NULL)
     if not name:
         errors.append("error: name_required")
@@ -60,7 +63,7 @@ def create_product(input: dict):
                 brand_id,
                 data.get("category_id"),
                 data.get("qty_value"),
-                data.get("unit_id"),
+                unit_id,
                 data.get("manufacturer"),
                 data.get("made_in"),
                 data.get("info"),
@@ -73,7 +76,7 @@ def create_product(input: dict):
 def get_products():
     with db_cursor(DB_PRODUCTS) as cursor:
         cursor.execute(
-            "SELECT * FROM products WHERE status = %s",
+            "SELECT * FROM products WHERE status_id = %s",
             (Status.ACTIVE,)
         )
         return cursor.fetchall()
@@ -84,7 +87,7 @@ def get_product(product_id):
         cursor.execute(
             """
             SELECT * FROM products
-            WHERE id = %s AND status = %s
+            WHERE id = %s AND status_id = %s
             """,
             (product_id, Status.ACTIVE)
         )
