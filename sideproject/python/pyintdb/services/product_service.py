@@ -30,19 +30,18 @@ def create_product(input: dict):
 
         except ValueError as e:
             errors.append(str(e))
-    #FETCHING
-    name = data.get("name")
-    brand_name = data.get("brand_name")
-    unit_name = data.get("unit_id")
-    if unit_name:
-       unit_name = get_unit_id_by_symbol(unit_name)
-       unit_id = unit_name["id"]
-    #category_id = data.get("category_id") LATER
     #NAME CHECK (SQL NOT NULL)
+    name = data.get("name")
     if not name:
         errors.append("error: name_required")
         return errors
+    #unit_name = data.get("unit_id")
+    #if unit_name:
+    #   unit_name = get_unit_id_by_symbol(unit_name)
+    #   unit_id = unit_name["id"]
+    unit_id = None
     #BRAND CHECK (NAME -> ID)
+    brand_name = data.get("brand_name")
     brand_id = None
     if brand_name:
         brand_id = get_or_create_brand(brand_name)
