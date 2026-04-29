@@ -7,7 +7,7 @@
 #SETTINGS
 from utils.field_mapper import validate_update_field
 from enums.status import Status
-from pyintdb.db_utils import db_cursor
+from pyintdb.core.db_utils import db_cursor
 from config import TABLE_DATABASE_MAP
 
 def update_field(table, user_field, value, row_id):

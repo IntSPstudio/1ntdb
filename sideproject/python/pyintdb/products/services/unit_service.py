@@ -6,7 +6,7 @@
 
 #SETTINGS
 from config import DB_PRODUCTS
-from pyintdb.db_utils import db_cursor
+from pyintdb.core.db_utils import db_cursor
 
 #BY SYMBOL 
 def get_unit_id_by_symbol(symbol: str) -> int | None:

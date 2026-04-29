@@ -6,7 +6,7 @@
 
 #SETTINGS
 from contextlib import contextmanager
-from pyintdb.db import get_connection
+from pyintdb.core.db import get_connection
 
 #MAIN
 @contextmanager

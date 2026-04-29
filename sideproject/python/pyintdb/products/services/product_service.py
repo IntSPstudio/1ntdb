@@ -6,11 +6,11 @@
 
 #SETTINGS
 from config import DB_PRODUCTS
-from pyintdb.db_utils import db_cursor
-from pyintdb.services.brand_service import get_or_create_brand
-from pyintdb.services.unit_service import get_unit_id_by_symbol
-from pyintdb.enums.status import Status
-from pyintdb.utils.field_mapper import validate_update_field
+from pyintdb.core.db_utils import db_cursor
+from pyintdb.core.enums.status import Status
+from pyintdb.core.utils.field_mapper import validate_update_field
+from pyintdb.products.services.brand_service import get_or_create_brand
+from pyintdb.products.services.unit_service import get_unit_id_by_symbol
 
 #CREATE PRODUCT WITH NO IDENTIFIER
 def create_product(input: dict):

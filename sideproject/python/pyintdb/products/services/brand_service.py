@@ -5,7 +5,7 @@
 #|==============================================================|#
 
 #SETTINGS
-from pyintdb.db_utils import db_cursor
+from pyintdb.core.db_utils import db_cursor
 from config import DB_PRODUCTS
 
 #ADD

@@ -8,10 +8,10 @@
 #SETTINGS
 import sys
 from os import get_terminal_size as cli_size
-from pyintdb.utils.field_mapper import TABLE_FIELDS as table_fields
-from pyintdb.services.brand_service import get_all_brands, get_brand_by_id, create_brand
-from pyintdb.services.product_service import create_product, get_products, get_product
-from pyintdb.services.unit_service import get_unit_id_by_symbol
+from pyintdb.core.utils.field_mapper import TABLE_FIELDS as table_fields
+from pyintdb.products.services.brand_service import get_all_brands, get_brand_by_id, create_brand
+from pyintdb.products.services.product_service import create_product, get_products, get_product
+from pyintdb.products.services.unit_service import get_unit_id_by_symbol
 
 #CLI PRINTER
 def printer(text):
