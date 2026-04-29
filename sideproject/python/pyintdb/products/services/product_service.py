@@ -76,7 +76,7 @@ def get_products():
     with db_cursor(DB_PRODUCTS) as cursor:
         cursor.execute(
             "SELECT * FROM products WHERE status_id = %s",
-            (Status.ACTIVE,)
+            (Status.ACTIVE.value,)
         )
         return cursor.fetchall()
 
@@ -88,7 +88,7 @@ def get_product(product_id):
             SELECT * FROM products
             WHERE id = %s AND status_id = %s
             """,
-            (product_id, Status.ACTIVE)
+            (product_id, Status.ACTIVE.value)
         )
         return cursor.fetchone()
 
@@ -114,7 +114,7 @@ def delete_product(product_id):
             SET status = %s
             WHERE id = %s
             """,
-            (Status.DELETED, product_id)
+            (Status.DELETED.value, product_id)
         )
 
         return cursor.rowcount > 0

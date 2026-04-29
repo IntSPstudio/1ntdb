@@ -19,12 +19,6 @@ DB_NAME = ""
 DB_PRODUCTS = "products"
 DB_SYSTEM = "system"
 
-#TABLE DATABASE mapping
-TABLE_DATABASE_MAP = {
-    "brands": DB_PRODUCTS,
-    "products": DB_PRODUCTS,
-}
-
 #|SECURITY|=====================================================|=
 SECRET_KEY =""
 
