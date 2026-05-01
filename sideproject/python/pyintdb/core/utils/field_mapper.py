@@ -6,17 +6,17 @@
 
 #SHORTCUT
 FIELD_ALIAS = {
-    "status": "status_id",
-    "brand": "brand_name",
-    "brandid": "brand_id",
-    "cat": "category_id",
-    "parent": "parent_id",
-    "unitid": "unit_id",
-    "man": "manufacturer",
-
-    "qty": "qty_value",
-    "create": "created_at",
-    "update": "updated_at"
+    "basic": {
+        "man": "manufacturer",
+        "qty": "qty_value",
+        "create": "created_at",
+        "update": "updated_at",
+        "status": "status_id",
+        "brand": "brand_id",
+        "cat": "category_id",
+        "parent": "parent_id",
+        "unit": "unit_id"
+    }
 }
 #WHITE LIST BY TABLE NAMES
 TABLE_FIELDS = {
@@ -58,7 +58,7 @@ def validate_field(table: str, user_input: str) -> str:
     #BORING TEXT
     cleaned = _clean_input(user_input)
     #SHORTCUT
-    field = FIELD_ALIAS.get(cleaned, cleaned)
+    field = FIELD_ALIAS["basic"].get(cleaned, cleaned)
     #TABLE NAME CHECK
     if table not in TABLE_FIELDS:
         raise ValueError(f"Invalid table: {table}")

@@ -9,43 +9,51 @@ from config import DB_PRODUCTS
 from pyintdb.core.db_utils import db_cursor
 from pyintdb.core.enums.status import Status
 from pyintdb.core.utils.field_mapper import validate_update_field
+from pyintdb.core.parsing.qty import parse_qty_input
 from pyintdb.products.services.brand_service import get_or_create_brand
-from pyintdb.products.services.unit_service import get_unit_id_by_symbol
+from pyintdb.core.services.unit_service import get_unit_id
 
 #CREATE PRODUCT WITH NO IDENTIFIER
 def create_product(input: dict):
-    #NEW DATA
     data = {}
-    errors = []
-    #CHECK FOR USER ERRORS
+    warnings = []
+    #VALIDATE + MAP INPUT
     for key, value in input.items():
         try:
             validated_key = validate_update_field("products", key)
-
             if validated_key is None:
-                errors.append(f"Skipped field: {key}")
+                warnings.append(f"Skipped field: {key}")
                 continue
-
             data[validated_key] = value
-
         except ValueError as e:
-            errors.append(str(e))
-    #NAME CHECK (SQL NOT NULL)
+            warnings.append(str(e))
+    #REQUIRED FIELD
     name = data.get("name")
     if not name:
-        errors.append("error: name_required")
-        return errors
-    #unit_name = data.get("unit_id")
-    #if unit_name:
-    #   unit_name = get_unit_id_by_symbol(unit_name)
-    #   unit_id = unit_name["id"]
-    unit_id = None
-    #BRAND CHECK (NAME -> ID)
-    brand_name = data.get("brand_name")
+        raise ValueError("name_required")
+    if get_product_by_name(name):
+        raise ValueError("name_already_exists")
+    #BRAND (name -> id)
     brand_id = None
-    if brand_name:
+    if brand_name := data.get("brand_name"):
         brand_id = get_or_create_brand(brand_name)
-    #COMMIT
+    data["brand_id"] = brand_id
+    #QUANTITY + UNIT RESOLUTION
+    raw_qty = data.get("qty_value")
+    if raw_qty:
+        unit_id = data.get("unit_id")
+        qty_value = None
+        unit_symbol = None
+        if unit_id:
+            if unit_id.isnumeric():
+                data["qty_value"] = raw_qty
+            else:
+                data["unit_id"] = get_unit_id(unit_id)
+        else:
+            qty_value, unit_symbol = parse_qty_input(raw_qty)
+            data["qty_value"] = qty_value
+            data["unit_id"] = get_unit_id(unit_symbol)
+    #INSERT
     with db_cursor(DB_PRODUCTS) as cursor:
         cursor.execute(
             """
@@ -59,17 +67,21 @@ def create_product(input: dict):
             """,
             (
                 name,
-                brand_id,
+                data.get("brand_id"),
                 data.get("category_id"),
                 data.get("qty_value"),
-                unit_id,
+                data.get("unit_id"),
                 data.get("manufacturer"),
                 data.get("made_in"),
                 data.get("info"),
                 data.get("note"),
             )
         )
-        return {"product_id": cursor.lastrowid, "errors": errors}
+
+        return {
+            "product_id": cursor.lastrowid,
+            "warnings": warnings
+        }
 
 #GET ALL
 def get_products():
@@ -80,8 +92,24 @@ def get_products():
         )
         return cursor.fetchall()
 
-#GET ONE
-def get_product(product_id):
+#GET ONE BY NAME
+def get_product_by_name(name: str) -> dict | None:
+    with db_cursor(DB_PRODUCTS) as cursor:
+        cursor.execute(
+            """
+            SELECT id, name, status_id
+            FROM products
+            WHERE LOWER(name) = %s
+            AND status_id = 1
+            LIMIT 1
+            """,
+            (name.lower(),)
+        )
+
+        return cursor.fetchone()
+
+#GET ONE BY ID
+def get_product_by_id(product_id: int):
     with db_cursor(DB_PRODUCTS) as cursor:
         cursor.execute(
             """

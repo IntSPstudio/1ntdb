@@ -10,8 +10,7 @@ import sys
 from os import get_terminal_size as cli_size
 from pyintdb.core.utils.field_mapper import TABLE_FIELDS as table_fields
 from pyintdb.products.services.brand_service import get_all_brands, get_brand_by_id, create_brand
-from pyintdb.products.services.product_service import create_product, get_products, get_product
-from pyintdb.products.services.unit_service import get_unit_id_by_symbol
+from pyintdb.products.services.product_service import create_product, get_products, get_product_by_id, get_product_by_name
 
 #CLI PRINTER
 def printer(text):
@@ -117,7 +116,7 @@ if __name__ == "__main__":
                 #INDEX
                 if len(sys.argv) == 2:
                     printer("            *** OPTIONS ***")
-                    printer("get id / ref")
+                    printer("get id / name / ref")
                     printer("create")
                 #MAIN
                 else:
@@ -135,9 +134,16 @@ if __name__ == "__main__":
                     elif len(sys.argv) == 5:
                         if sys.argv[2] == "get":
                             if sys.argv[3] == "id":
-                                for key, value in get_product(sys.argv[4]).items():
+                                for key, value in get_product_by_id(sys.argv[4]).items():
                                     output = str(key) +" : "+ str(value)
                                     printer(output)
+                            elif sys.argv[3] == "name":
+                                output = get_product_by_name(sys.argv[4])
+                                product_id = output["id"]
+                                if product_id:
+                                    for key, value in get_product_by_id(product_id).items():
+                                        output = str(key) +" : "+ str(value)
+                                        printer(output)
                             elif sys.argv[3] == "ref":
                                 output = "Get product data from by reference code: "+ str(sys.argv[4])
                                 printer(output)
