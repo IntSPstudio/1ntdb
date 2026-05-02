@@ -5,6 +5,15 @@
 #|==============================================================|#
 
 #SHORTCUT
+ALLOWED_TABLES = {
+    "products",
+    "brands",
+    "units",
+    "categories",
+    "product_identifiers",
+    "product_prices"
+}
+
 FIELD_ALIAS = {
     "basic": {
         "man": "manufacturer",
@@ -21,7 +30,7 @@ FIELD_ALIAS = {
 #WHITE LIST BY TABLE NAMES
 TABLE_FIELDS = {
     "create_products": {
-        "id", "brand", "brand_id","category", "category_id", "unit", "unit_id",
+        "brand", "brand_id","category", "category_id", "unit", "unit_id",
         "name", "type", "info", "note", "qty_value", "made_in",
         "manufacturer", "gtin", "gtin_value"
     },

@@ -31,8 +31,8 @@ def create_product(input: dict):
     name = data.get("name")
     if not name:
         raise ValueError("name_required")
-    if get_product_by_name(name):
-        raise ValueError("name_already_exists")
+    #if get_product_by_name(name):
+    #    raise ValueError("name_already_exists")
     #BRAND (name -> id)
     brand_id = None
     if brand_name := data.get("brand_name"):

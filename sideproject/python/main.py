@@ -27,46 +27,54 @@ def printer(text):
 #CREATE PRODUCT WIZARD
 def create_product_wiz():
     #START
+    loop =1
     continuity =1
     data ={}
     printer("Add properties by writing: Key = value")
     printer("Type 'exit' to quit and 'info' for key values")
     #ADD DATA
-    while continuity == 1:
-        raw_input = input("=] Add new: ")
-        if str.lower(raw_input) == "exit" or str.lower(raw_input) == "quit":
-            continuity =0
-        elif str.lower(raw_input) == "info" or str.lower(raw_input) == "help":
-            a ="=]"
-            c =0
-            d =""
-            for b in table_fields["create_products"]:
-                c +=1
-                a = a +" "+str(c)+". "+ str(b)
-            print(a)
-        else:
-            parts = raw_input.split("=", 1)
-            if len(parts) != 2:
-                printer("Invalid format! Use: key = value")
-                continue
-            key = parts[0].strip()
-            value = parts[1].strip()
-            data[key] = value
-    #SHOW AND CONFIRM DATA
-    if data:
-        printer("")
-        printer("Selected data:")
-        for key, value in data.items():
-            output = str(key) +" = "+ str(value)
-            printer(output)
-        printer("")
-        raw_input = input("=] Send it! Yes or no? ")
-        if str.lower(raw_input) == "yes" or str.lower(raw_input) == "y":
-            #START FUNCTION HERE
-            output = str(create_product(data))
-            #printer(output)
-        else:
-            printer("Event cancelled")
+    while loop == 1:
+        while continuity == 1:
+            raw_input = input("=] Add new: ")
+            if str.lower(raw_input) == "exit" or str.lower(raw_input) == "quit":
+                continuity =0
+            elif str.lower(raw_input) == "info" or str.lower(raw_input) == "help":
+                a ="=]"
+                c =0
+                d =""
+                for b in table_fields["create_products"]:
+                    c +=1
+                    a = a +" "+str(c)+". "+ str(b)
+                print(a)
+            else:
+                parts = raw_input.split("=", 1)
+                if len(parts) != 2:
+                    printer("Invalid format! Use: key = value")
+                    continue
+                key = parts[0].strip()
+                value = parts[1].strip()
+                data[key] = value
+        #SHOW AND CONFIRM DATA
+        if data:
+            print("=]")
+            printer("Selected data:")
+            for key, value in data.items():
+                output = str(key) +" = "+ str(value)
+                printer(output)
+            print("=]")
+            raw_input = input("=] Send it! Yes or no? (Or 'edit') ")
+            if str.lower(raw_input) == "yes" or str.lower(raw_input) == "y":
+                #START FUNCTION HERE
+                continuity =0
+                loop =0
+                output = str(create_product(data))
+                return output
+            elif str.lower(raw_input) == "edit" or str.lower(raw_input) == "e": 
+                continuity =1
+            else:
+                loop =0
+                printer("Event cancelled")
+        return "Error"
 #MAIN LOOP
 if __name__ == "__main__":
     try:
@@ -78,11 +86,11 @@ if __name__ == "__main__":
             printer("products")
             printer("brands")
         else:
-            cmd = sys.argv[1]
+            cmd = str.lower(sys.argv[1])
             #
             # BRANDS
             #
-            if cmd == "brands":
+            if cmd == "brands" or cmd == "brand":
                 #INDEX
                 if len(sys.argv) == 2:
                     printer("            *** OPTIONS ***")
@@ -112,7 +120,7 @@ if __name__ == "__main__":
             #
             # PRODUCTS
             #
-            elif cmd == "products":
+            elif cmd == "products" or cmd == "product":
                 #INDEX
                 if len(sys.argv) == 2:
                     printer("            *** OPTIONS ***")
@@ -124,6 +132,7 @@ if __name__ == "__main__":
                     if len(sys.argv) == 3:
                         if sys.argv[2] == "create":
                             output = create_product_wiz()
+                            printer(output)
                     #GET ALL DATA
                     elif len(sys.argv) == 4:
                         if sys.argv[2] == "get":
