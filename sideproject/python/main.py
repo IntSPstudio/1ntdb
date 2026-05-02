@@ -13,6 +13,7 @@ from pyintdb.core.utils.field_mapper import IDENTIFIER_KEYS as id_keys
 from pyintdb.products.services.brand_service import get_all_brands, get_brand_by_id, create_brand
 from pyintdb.products.services.product_service import create_product, get_products, get_product_by_id, get_product_by_name
 from pyintdb.products.services.product_service import get_products_by_name, get_product_by_identifier, delete_product
+from pyintdb.products.services.lookup_service import basic_lookup
 from pyintdb.products.services.identifier_service import get_or_create_identifier
 
 #CLI PRINTER
@@ -115,14 +116,23 @@ if __name__ == "__main__":
         #
         if len(sys.argv) < 2:
             printer("           *** Welcome! Available commands ***")
+            printer("search")
             printer("products")
             printer("brands")
         else:
             cmd = str.lower(sys.argv[1])
             #
+            # SEARCH
+            #
+            if cmd == "search" or cmd == "lookup":
+                if len(sys.argv) == 3:
+                    print("SEARCHING", sys.argv[2])
+                    output = basic_lookup(sys.argv[2])
+                    printer(output)
+            #
             # BRANDS
             #
-            if cmd == "brands" or cmd == "brand":
+            elif cmd == "brands" or cmd == "brand":
                 #INDEX
                 if len(sys.argv) == 2:
                     printer("            *** OPTIONS ***")

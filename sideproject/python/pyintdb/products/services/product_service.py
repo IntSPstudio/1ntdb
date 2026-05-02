@@ -8,10 +8,10 @@
 from config import DB_PRODUCTS
 from pyintdb.core.db_utils import db_cursor
 from pyintdb.core.enums.status import Status
-from pyintdb.core.repository import fetch_one
 from pyintdb.core.utils.field_mapper import validate_update_field
 from pyintdb.core.parsing.qty import parse_qty_input
-from pyintdb.core.services.unit_service import get_unit_id
+from pyintdb.products.repositories.product_repository import fetch_one
+from pyintdb.products.services.unit_service import get_unit_id
 from pyintdb.products.services.brand_service import get_or_create_brand
 
 #CREATE PRODUCT WITH NO IDENTIFIER

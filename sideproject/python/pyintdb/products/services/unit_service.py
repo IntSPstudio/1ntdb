@@ -8,10 +8,6 @@
 from config import DB_PRODUCTS
 from pyintdb.core.db_utils import db_cursor
 
-#
-# PRODUCTS
-#
-
 #BY SYMBOL
 def get_unit_id(value: str) -> int:
     with db_cursor(DB_PRODUCTS) as cursor:

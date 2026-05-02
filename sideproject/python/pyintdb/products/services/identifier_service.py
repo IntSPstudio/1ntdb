@@ -7,7 +7,7 @@
 #SETTINGS
 from config import DB_PRODUCTS
 from pyintdb.core.db_utils import db_cursor
-from pyintdb.core.repository import fetch_one
+from pyintdb.products.repositories.product_repository import fetch_one
 from pyintdb.products.services.product_service import get_product_by_name
 
 #GET OR CREATE IDENTIFIER (USER SIDE)
