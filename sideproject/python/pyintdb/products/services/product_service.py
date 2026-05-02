@@ -32,8 +32,11 @@ def create_product(input: dict):
     name = data.get("name")
     if not name:
         raise ValueError("name_required")
-    #if get_product_by_name(name):
-    #    raise ValueError("name_already_exists")
+    output = get_product_by_name(name)
+    if output:
+        product_id = output["id"]
+        delete_product(product_id)
+        #raise ValueError("name_already_exists")
     #BRAND (name -> id)
     brand_id = None
     if brand_name := data.get("brand_name"):
@@ -185,7 +188,7 @@ def delete_product(product_id):
         cursor.execute(
             """
             UPDATE products
-            SET status = %s
+            SET status_id = %s
             WHERE id = %s
             """,
             (Status.DELETED.value, product_id)

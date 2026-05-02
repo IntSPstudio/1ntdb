@@ -9,9 +9,10 @@
 import sys
 from os import get_terminal_size as cli_size
 from pyintdb.core.utils.field_mapper import TABLE_FIELDS as table_fields
+from pyintdb.core.utils.field_mapper import IDENTIFIER_KEYS as id_keys
 from pyintdb.products.services.brand_service import get_all_brands, get_brand_by_id, create_brand
 from pyintdb.products.services.product_service import create_product, get_products, get_product_by_id, get_product_by_name
-#from pyintdb.products.services.identifier_service import get_or_create_identifier_dict
+from pyintdb.products.services.identifier_service import get_or_create_identifier
 from pyintdb.products.services.product_service import get_product_by_identifier
 
 #CLI PRINTER
@@ -65,15 +66,39 @@ def create_product_wiz():
                 printer(output)
             print("=]")
             raw_input = input("=] Send it! Yes or no? (Or 'edit') ")
-            #SEND
+            #PROCESS
             if str.lower(raw_input) == "yes" or str.lower(raw_input) == "y":
-                #IDENTIFIER SETUP
-
-                #START FUNCTION HERE
+                #START FUNCTION
                 continuity =0
                 loop =0
-                output = create_product(data)
-                return output
+                #IDENTIFIER SETUP
+                identifiers =[] 
+                mod_data ={}
+                for key, value in data.items():
+                    if key.lower() in id_keys:
+                        identifiers.append({
+                            "type": key.lower(),
+                            "value": value
+                        })
+                    else:
+                        mod_data[key] = value
+                #CHECK IDENTIFIERS
+                if identifiers:
+                    results =[]
+                    product = create_product(mod_data)
+                    product_id = product.get("product_id")
+
+                    for identifier in identifiers:
+                        output = get_or_create_identifier(
+                        identifier=identifier["value"],
+                        type=identifier["type"],
+                        product_id=product_id
+                    )
+                        
+                    return results
+                else:
+                    output = create_product(data)
+                    return output
             #EDIT
             elif str.lower(raw_input) == "edit" or str.lower(raw_input) == "e": 
                 continuity =1

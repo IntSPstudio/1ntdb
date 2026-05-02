@@ -4,7 +4,7 @@
 # ID: 980002035
 #|==============================================================|#
 
-#SHORTCUT
+#ALLOWED TABLES
 ALLOWED_TABLES = {
     "products",
     "brands",
@@ -14,6 +14,7 @@ ALLOWED_TABLES = {
     "product_prices"
 }
 
+#SHORTCUT
 FIELD_ALIAS = {
     "basic": {
         "man": "manufacturer",
@@ -47,11 +48,22 @@ TABLE_FIELDS = {
         "id", "status_id", "name", "symbol", "created_at", "updated_at"
     }
 }
+
 #READ ONLY FIELDS
 READ_ONLY_FIELDS = {
     "id",
     "created_at",
     "updated_at"
+}
+
+IDENTIFIER_KEYS = {
+    "ean13",
+    "ean8",
+    "ean",
+    "upc",
+    "barcode",
+    "sku",
+    "isbn"
 }
 
 #BORING TEXT
