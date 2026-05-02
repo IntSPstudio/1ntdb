@@ -25,3 +25,8 @@ def update_field(table: str, user_field: str, value, row_id: int):
     with db_cursor() as cursor:
         cursor.execute(query, (value, row_id, Status.ACTIVE.value))
         return cursor.rowcount
+
+#
+def fetch_one(cursor):
+    row = cursor.fetchone()
+    return row if row else None

@@ -8,10 +8,11 @@
 from config import DB_PRODUCTS
 from pyintdb.core.db_utils import db_cursor
 from pyintdb.core.enums.status import Status
+from pyintdb.core.repository import fetch_one
 from pyintdb.core.utils.field_mapper import validate_update_field
 from pyintdb.core.parsing.qty import parse_qty_input
-from pyintdb.products.services.brand_service import get_or_create_brand
 from pyintdb.core.services.unit_service import get_unit_id
+from pyintdb.products.services.brand_service import get_or_create_brand
 
 #CREATE PRODUCT WITH NO IDENTIFIER
 def create_product(input: dict):
@@ -82,6 +83,51 @@ def create_product(input: dict):
             "product_id": cursor.lastrowid,
             "warnings": warnings
         }
+    
+#GET PRODUCT WITH IDENTIFIER (EXAMPLE: GTIN)
+def get_product_by_identifier(identifier: str, type: str = None):
+    #RULES
+    if not identifier:
+        return {"error": "identifier is required"}
+    identifier = identifier.strip()
+    #
+    try:
+        with db_cursor(DB_PRODUCTS) as cursor:
+
+            if type:
+                type = type.strip().lower()
+
+                cursor.execute("""
+                    SELECT p.*
+                    FROM product_identifiers pi
+                    JOIN products p ON pi.product_id = p.id
+                    WHERE pi.identifier = %s
+                      AND pi.type = %s
+                      AND p.status_id != 4
+                    LIMIT 1
+                """, (identifier, type))
+
+            else:
+                cursor.execute("""
+                    SELECT p.*
+                    FROM product_identifiers pi
+                    JOIN products p ON pi.product_id = p.id
+                    WHERE pi.identifier = %s
+                      AND p.status_id != 4
+                    LIMIT 1
+                """, (identifier,))
+
+            row = fetch_one(cursor)
+
+            if not row:
+                return {"found": False}
+
+            return {
+                "found": True,
+                "product": row
+            }
+    except Exception as e:
+        return {"error": str(e)}
 
 #GET ALL
 def get_products():

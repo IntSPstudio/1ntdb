@@ -11,6 +11,8 @@ from os import get_terminal_size as cli_size
 from pyintdb.core.utils.field_mapper import TABLE_FIELDS as table_fields
 from pyintdb.products.services.brand_service import get_all_brands, get_brand_by_id, create_brand
 from pyintdb.products.services.product_service import create_product, get_products, get_product_by_id, get_product_by_name
+#from pyintdb.products.services.identifier_service import get_or_create_identifier_dict
+from pyintdb.products.services.product_service import get_product_by_identifier
 
 #CLI PRINTER
 def printer(text):
@@ -63,14 +65,19 @@ def create_product_wiz():
                 printer(output)
             print("=]")
             raw_input = input("=] Send it! Yes or no? (Or 'edit') ")
+            #SEND
             if str.lower(raw_input) == "yes" or str.lower(raw_input) == "y":
+                #IDENTIFIER SETUP
+
                 #START FUNCTION HERE
                 continuity =0
                 loop =0
-                output = str(create_product(data))
+                output = create_product(data)
                 return output
+            #EDIT
             elif str.lower(raw_input) == "edit" or str.lower(raw_input) == "e": 
                 continuity =1
+            #STOP
             else:
                 loop =0
                 printer("Event cancelled")
@@ -142,10 +149,12 @@ if __name__ == "__main__":
                     #GET SPECIFIC DATA
                     elif len(sys.argv) == 5:
                         if sys.argv[2] == "get":
+                            #BY ID
                             if sys.argv[3] == "id":
                                 for key, value in get_product_by_id(sys.argv[4]).items():
                                     output = str(key) +" : "+ str(value)
                                     printer(output)
+                            #BY NAME
                             elif sys.argv[3] == "name":
                                 output = get_product_by_name(sys.argv[4])
                                 product_id = output["id"]
@@ -153,8 +162,15 @@ if __name__ == "__main__":
                                     for key, value in get_product_by_id(product_id).items():
                                         output = str(key) +" : "+ str(value)
                                         printer(output)
+                            #BY REF NO TYPE
                             elif sys.argv[3] == "ref":
-                                output = "Get product data from by reference code: "+ str(sys.argv[4])
+                                output = get_product_by_identifier(sys.argv[4])
+                                printer(output)
+                    elif len(sys.argv) == 6:
+                        if sys.argv[2] == "get":
+                            #BY REF WITH TYPE
+                            if sys.argv[3] == "ref":
+                                output = get_product_by_identifier(sys.argv[4],sys.argv[5])
                                 printer(output)
     except:
         sys.exit()
