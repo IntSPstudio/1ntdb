@@ -10,7 +10,7 @@ import sys
 from os import get_terminal_size as cli_size
 from pyintdb.core.utils.field_mapper import TABLE_FIELDS as table_fields
 from pyintdb.core.utils.field_mapper import IDENTIFIER_KEYS as id_keys
-from pyintdb.products.services.brand_service import get_all_brands, get_brand_by_id, create_brand
+from pyintdb.products.services.brand_service import get_all_brands, get_brand_by_id, get_or_create_brand
 from pyintdb.products.services.product_service import create_product, get_products, get_product_by_id, get_product_by_name
 from pyintdb.products.services.product_service import get_products_by_name, get_product_by_identifier, delete_product
 from pyintdb.products.services.lookup_service import basic_lookup
@@ -34,7 +34,7 @@ def create_product_wiz():
     loop =1
     continuity =1
     data ={}
-    printer("Add properties by writing: Key = value")
+    printer("Add properties by writing: key = value")
     printer("Type 'exit' to quit and 'info' for key values")
     #ADD DATA
     while loop == 1:
@@ -115,6 +115,7 @@ if __name__ == "__main__":
         # MAIN MENU
         #
         if len(sys.argv) < 2:
+            printer("")
             printer("           *** Welcome! Available commands ***")
             printer("search")
             printer("products")
@@ -126,8 +127,8 @@ if __name__ == "__main__":
             #
             if cmd == "search" or cmd == "lookup":
                 if len(sys.argv) == 3:
-                    print("SEARCHING", sys.argv[2])
-                    output = basic_lookup(sys.argv[2])
+                    search = str(sys.argv[2])
+                    output = basic_lookup(search)
                     printer(output)
             #
             # BRANDS
@@ -135,8 +136,9 @@ if __name__ == "__main__":
             elif cmd == "brands" or cmd == "brand":
                 #INDEX
                 if len(sys.argv) == 2:
+                    printer("")
                     printer("            *** OPTIONS ***")
-                    printer("get")
+                    printer("get all, id")
                     printer("create")
                 #MAIN
                 elif len(sys.argv) > 3:
@@ -145,17 +147,23 @@ if __name__ == "__main__":
                         if len(sys.argv) > 4:
                             brand = sys.argv[3]
                             info = sys.argv[4]
-                            result = create_brand(brand, info)
+                            result = get_or_create_brand(brand, info)
                         else:
-                            result = create_brand(sys.argv[3])
+                            result = get_or_create_brand(sys.argv[3])
                         printer(result)
                     #GET BRAND
                     elif sys.argv[2] == "get":
-                        input = sys.argv[3]
-                        if input == "all":
+                        raw_input = sys.argv[3]
+                        if raw_input == "all":
                             for b in get_all_brands():
                                 printer(b)
                         else:
+                            if raw_input.isnumeric():
+                                input = int(raw_input)
+                            else:
+                                brand = get_or_create_brand(raw_input)
+                                input = int(brand["id"])
+                            
                             for key, value in get_brand_by_id(input).items():
                                 output = str(key) +" : "+ str(value)
                                 printer(output)
@@ -165,10 +173,11 @@ if __name__ == "__main__":
             elif cmd == "products" or cmd == "product":
                 #INDEX
                 if len(sys.argv) == 2:
+                    printer("")
                     printer("            *** OPTIONS ***")
                     printer("create")
-                    printer("get id, name, ref")
-                    printer("delete id")
+                    printer("get all, id, name, ref")
+                    printer("delete id, name")
                 #MAIN
                 else:
                     #CREATE PRODUCT WIZARD
@@ -221,5 +230,9 @@ if __name__ == "__main__":
                             if sys.argv[3] == "ref":
                                 output = get_product_by_identifier(sys.argv[4],sys.argv[5])
                                 printer(output)
+            #
+            # REFERENCE
+            #
+
     except:
         sys.exit()

@@ -44,7 +44,8 @@ def create_product(input: dict):
         if brand.isnumeric():
             data["brand_id"] = int(brand)
         else:
-            data["brand_id"] = get_or_create_brand(brand)
+            brand_id = get_or_create_brand(brand)
+            data["brand_id"] = brand_id["id"]
     #QUANTITY + UNIT RESOLUTION
     raw_qty = data.get("qty_value")
     if raw_qty:
@@ -192,12 +193,12 @@ def update_product(product_id, field, value):
     query = f"""
     UPDATE products
     SET {field} = %s
-    WHERE id = %s AND status = %s
+    WHERE id = %s AND status_id = %s
     """
 
-    #with db_cursor(DB_PRODUCTS) as cursor:
-    #    cursor.execute(query, (value, product_id, Status.ACTIVE))
-    #    return cursor.rowcount > 0
+    with db_cursor(DB_PRODUCTS) as cursor:
+        cursor.execute(query, (value, product_id, Status.ACTIVE))
+        return cursor.rowcount > 0
 #SOFT DELETE VERSION
 def delete_product(product_id):
     with db_cursor(DB_PRODUCTS) as cursor:
