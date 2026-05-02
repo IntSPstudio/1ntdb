@@ -63,7 +63,9 @@ IDENTIFIER_KEYS = {
     "upc",
     "barcode",
     "sku",
-    "isbn"
+    "isbn",
+    "code",
+    "artnr"
 }
 
 #BORING TEXT

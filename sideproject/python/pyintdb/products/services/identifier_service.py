@@ -42,7 +42,9 @@ def get_or_create_identifier(
     if product_id and product_name:
         return {"error": "use either product_id or product_name, not both"}
     #BORING TEXT
-    identifier = identifier.strip()
+    identifier = identifier.replace(" ", "")
+    #identifier = identifier.strip()
+
     type = type.strip().lower()
     #GET PRODUCT ID
     if product_name:

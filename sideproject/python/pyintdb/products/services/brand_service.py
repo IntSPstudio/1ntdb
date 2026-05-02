@@ -40,7 +40,7 @@ def create_brand(name, info=None):
 def get_or_create_brand(name):
 
     with db_cursor(DB_PRODUCTS) as cursor:
-        cursor.execute("SELECT id FROM brands WHERE name=%s", (name,))
+        cursor.execute("SELECT id FROM brands WHERE LOWER(name)=%s", (str.lower(name),))
         
         row = cursor.fetchone()
         if row:

@@ -12,8 +12,8 @@ from pyintdb.core.utils.field_mapper import TABLE_FIELDS as table_fields
 from pyintdb.core.utils.field_mapper import IDENTIFIER_KEYS as id_keys
 from pyintdb.products.services.brand_service import get_all_brands, get_brand_by_id, create_brand
 from pyintdb.products.services.product_service import create_product, get_products, get_product_by_id, get_product_by_name
+from pyintdb.products.services.product_service import get_products_by_name, get_product_by_identifier, delete_product
 from pyintdb.products.services.identifier_service import get_or_create_identifier
-from pyintdb.products.services.product_service import get_product_by_identifier
 
 #CLI PRINTER
 def printer(text):
@@ -156,8 +156,9 @@ if __name__ == "__main__":
                 #INDEX
                 if len(sys.argv) == 2:
                     printer("            *** OPTIONS ***")
-                    printer("get id / name / ref")
                     printer("create")
+                    printer("get id, name, ref")
+                    printer("delete id")
                 #MAIN
                 else:
                     #CREATE PRODUCT WIZARD
@@ -171,9 +172,22 @@ if __name__ == "__main__":
                             if sys.argv[3] == "all":
                                 for b in get_products():
                                     printer(b)
-                    #GET SPECIFIC DATA
                     elif len(sys.argv) == 5:
-                        if sys.argv[2] == "get":
+                        #SOFT DELETE DATA
+                        if sys.argv[2] == "delete":
+                            value = sys.argv[4]
+                            if sys.argv[3] == "id":
+                                output = delete_product(value)
+                                output = "Deleting id"+ str(value)+ str(output)
+                                printer(output)
+                            elif sys.argv[3] == "name":
+                                products = get_products_by_name(sys.argv[4])
+                                output =[]
+                                for row in products:
+                                    product_id = row["id"]
+                                    output.append(delete_product(product_id))
+                        #GET SPECIFIC DATA
+                        elif sys.argv[2] == "get":
                             #BY ID
                             if sys.argv[3] == "id":
                                 for key, value in get_product_by_id(sys.argv[4]).items():

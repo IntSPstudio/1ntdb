@@ -32,16 +32,19 @@ def create_product(input: dict):
     name = data.get("name")
     if not name:
         raise ValueError("name_required")
-    output = get_product_by_name(name)
-    if output:
-        product_id = output["id"]
-        delete_product(product_id)
+    products = get_product_by_name(name)
+    if products:
+        for row in products:
+            product_id = row["id"]
+            delete_product(product_id)
         #raise ValueError("name_already_exists")
     #BRAND (name -> id)
-    brand_id = None
-    if brand_name := data.get("brand_name"):
-        brand_id = get_or_create_brand(brand_name)
-    data["brand_id"] = brand_id
+    brand = data.get("brand_id")
+    if brand:
+        if brand.isnumeric():
+            data["brand_id"] = int(brand)
+        else:
+            data["brand_id"] = get_or_create_brand(brand)
     #QUANTITY + UNIT RESOLUTION
     raw_qty = data.get("qty_value")
     if raw_qty:
@@ -154,8 +157,21 @@ def get_product_by_name(name: str) -> dict | None:
             """,
             (name.lower(),)
         )
-
         return cursor.fetchone()
+
+#GET ALL BY NAME
+def get_products_by_name(name: str) -> list[dict]:
+    with db_cursor(DB_PRODUCTS) as cursor:
+        cursor.execute(
+            """
+            SELECT id, name, status_id
+            FROM products
+            WHERE LOWER(name) = %s
+            AND status_id = 1
+            """,
+            (name.lower(),)
+        )
+        return cursor.fetchall()
 
 #GET ONE BY ID
 def get_product_by_id(product_id: int):
