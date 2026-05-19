@@ -6,7 +6,6 @@
 
 #SETTINGS
 from pyintdb.cli.router import run_cli
-import argparse
 
 #MAIN LOOP
 def main():
