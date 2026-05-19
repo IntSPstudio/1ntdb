@@ -11,6 +11,7 @@
 -- |==============================================================|
 
 -- CREATE DATABASE
+CREATE DATABASE IF NOT EXISTS system;
 CREATE DATABASE IF NOT EXISTS products;
 
 -- EXECUTE TABLE CREATION SCRIPT: (This is the file next to. This is where we create the tables in that database.)
@@ -22,6 +23,7 @@ CREATE DATABASE IF NOT EXISTS products;
 CREATE USER 'username'@'localhost' IDENTIFIED BY 'CHANGE_ME_SUPER_STRONG_PASSWORD';
 
 -- PRIVILEGES (Access to only product database tables with select, insert, update):
+GRANT SELECT, INSERT, UPDATE ON system.* TO 'username'@'localhost';
 GRANT SELECT, INSERT, UPDATE ON products.* TO 'username'@'localhost';
 
 -- OR FOR ALL PRIVILEGES TO ALL DATABASES AND TABLES (This is not the best option):
