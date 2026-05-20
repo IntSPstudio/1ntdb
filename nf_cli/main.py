@@ -15,6 +15,7 @@ from pyintdb.cli.router import run_cli
     PFI = Finance
     ORD = Orders
     TSK = Tasks / Todo
+    JRN = Basic activity notes
     CRM = Contacts
     ADR = Adresses
 """

@@ -6,7 +6,6 @@
 
 #SETTINGS
 import click
-from pyintdb.utils.printer import printer
 
 #MAIN
 @click.group(name="pdb")
@@ -18,24 +17,24 @@ def pdb_group():
 @pdb_group.command(name="create")
 def create_product():
     """- Add a new product"""
-    printer("Product wizard...")
+    click.echo("Product wizard...")
 
 #GET BY ID
 @pdb_group.command(name="get_id")
 @click.argument('product_id', type=int)
 def get_product_by_id(product_id):
     """- Get product details by ID"""
-    printer(f"Getting all from product: {product_id}")
+    click.echo(f"Getting all from product: {product_id}")
 
 #GET BY REFERENCE
 @pdb_group.command(name="get_ref")
 @click.argument('product_reference', type=str)
 def get_product_by_id(product_reference):
     """- Get product details by reference"""
-    printer(f"Getting all from product: {product_reference}")    
+    click.echo(f"Getting all from product: {product_reference}")    
 
 #GET ALL
 @pdb_group.command(name="list")
 def get_products():
     """- List of all products"""
-    printer("Getting all products")
+    click.echo("Getting all products")
