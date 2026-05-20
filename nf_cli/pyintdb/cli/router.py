@@ -5,36 +5,20 @@
 #|==============================================================|#
 
 #SETTINGS
-import argparse
-from pyintdb.utils.printer import (printer, printer_table)
-from pyintdb.cli import products, timtra
+import click
+from pyintdb.cli.fleet import fleet_group
+from pyintdb.cli.products import pdb_group
+from pyintdb.cli.finance import finance_group
 
-#RULES
-ROUTES = {
-    "pdb": products.handle,
-    "timtra": timtra.handle
-}
+#MAIN
+@click.group()
+def router():
+    """1NTDB: Personal ERP & Inventory System"""
+    pass
+router.add_command(pdb_group)
+router.add_command(fleet_group)
+router.add_command(finance_group)
 
 #START COMMAND LINE
 def run_cli():
-    #ARGPARSE
-    parser = argparse.ArgumentParser(
-        prog='1NTDB',
-        description='Personal ERP & Inventory System',
-        epilog='github.com/IntSPstudio/1ntdb')
-
-    parser.add_argument("module")
-    parser.add_argument("action")
-    parser.add_argument("target", nargs="?", default=None)
-    args = parser.parse_args()
-    route_command(args)
-
-#COMMAND ROUTING
-def route_command(args):
-    module = args.module
-    #RULES
-    if module not in ROUTES:
-        print(f"Unknown module: {module}")
-        return
-    #SEND
-    ROUTES[module](args)
+    router()

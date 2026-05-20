@@ -5,18 +5,37 @@
 #|==============================================================|#
 
 #SETTINGS
-from pyintdb.utils.printer import (printer, printer_table)
+import click
+from pyintdb.utils.printer import printer
 
 #MAIN
-def handle(args):
-    action = args.action
-    target = args.target
-    if action == "get":
-        if target == "all":
-            printer("Getting all products")
-        else:
-            printer(f"Getting product: {target}")
-    elif action == "create":
-        printer("Creating product")
-    else:
-        printer("Unknown action")
+@click.group(name="pdb")
+def pdb_group():
+    """- Product database commands"""
+    pass
+
+#ADD
+@pdb_group.command(name="create")
+def create_product():
+    """- Add a new product"""
+    printer("Product wizard...")
+
+#GET BY ID
+@pdb_group.command(name="get_id")
+@click.argument('product_id', type=int)
+def get_product_by_id(product_id):
+    """- Get product details by ID"""
+    printer(f"Getting all from product: {product_id}")
+
+#GET BY REFERENCE
+@pdb_group.command(name="get_ref")
+@click.argument('product_reference', type=str)
+def get_product_by_id(product_reference):
+    """- Get product details by reference"""
+    printer(f"Getting all from product: {product_reference}")    
+
+#GET ALL
+@pdb_group.command(name="list")
+def get_products():
+    """- List of all products"""
+    printer("Getting all products")

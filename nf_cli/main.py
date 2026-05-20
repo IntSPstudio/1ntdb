@@ -7,6 +7,18 @@
 #SETTINGS
 from pyintdb.cli.router import run_cli
 
+"""
+    PDB = Product database
+    AST = Inventory / stock
+    TMS = Timtra (Time management system)
+    FLT = Fleet (Vehicles, trailers, trucks)
+    PFI = Finance
+    ORD = Orders
+    TSK = Tasks / Todo
+    CRM = Contacts
+    ADR = Adresses
+"""
+
 #MAIN LOOP
 def main():
     #conn = get_conn()

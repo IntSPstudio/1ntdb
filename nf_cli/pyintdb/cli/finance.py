@@ -5,9 +5,10 @@
 #|==============================================================|#
 
 #SETTINGS
-from pyintdb.utils.printer import (printer, printer_table)
+import click
 
 #MAIN
-def handle(args):
-    action = args.action
-    target = args.target
+@click.group(name="pfi")
+def finance_group():
+    """- Finance management commands"""
+    pass
