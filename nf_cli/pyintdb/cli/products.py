@@ -13,28 +13,27 @@ def pdb_group():
     """- Product database commands"""
     pass
 
-#ADD
+#CREATE NEW PRODUCT
 @pdb_group.command(name="create")
 def create_product():
-    """- Add a new product"""
+    """- Add a new product via wizard"""
     click.echo("Product wizard...")
 
-#GET BY ID
-@pdb_group.command(name="get_id")
-@click.argument('product_id', type=int)
-def get_product_by_id(product_id):
-    """- Get product details by ID"""
-    click.echo(f"Getting all from product: {product_id}")
-
-#GET BY REFERENCE
-@pdb_group.command(name="get_ref")
-@click.argument('product_reference', type=str)
-def get_product_by_id(product_reference):
-    """- Get product details by reference"""
-    click.echo(f"Getting all from product: {product_reference}")    
-
-#GET ALL
-@pdb_group.command(name="list")
-def get_products():
-    """- List of all products"""
-    click.echo("Getting all products")
+#GET
+@pdb_group.command(name="get")
+@click.argument('select', type=str)
+@click.argument('target', required=False)
+def default_add_event(select, target):
+    """- Options: all, id, ref"""
+    #ALL
+    if select == "all":
+        click.echo("Getting all products")
+    #BY ID
+    elif select == "id":
+        click.echo(f"Getting all from product by ID: {target}")
+    #BY REFERENCE
+    elif select == "ref":
+        click.echo(f"Getting all from product by REFERENCE: {target}")
+    #
+    else:
+        click.echo("Invalid option")

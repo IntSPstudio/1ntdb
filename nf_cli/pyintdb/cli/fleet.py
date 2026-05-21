@@ -16,15 +16,16 @@ def fleet_group():
 #ADDER
 @fleet_group.command(name="add")
 @click.argument('event', type=str)
-@click.argument('target', type=str)
+@click.argument('target', type=str, required=False)
 def default_add_event(event, target):
-    """- Options: Refuel, service"""
+    """- Options: refuel, service"""
     #REFUEL
     if event == "refuel":
         click.echo(f"Refueling vehicle id: {target}")
     #SERVICE
-    if event == "service":
+    elif event == "service":
         click.echo(f"Added service event to vehicle id: {target}")
+    #
     else:
         click.echo("Invalid event")
 
