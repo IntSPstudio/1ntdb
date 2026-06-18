@@ -8,38 +8,49 @@
 USE `products`;
 SET default_storage_engine=InnoDB;
 
-CREATE TABLE IF NOT EXISTS brands (
+CREATE TABLE IF NOT EXISTS organizations (
     id INT AUTO_INCREMENT PRIMARY KEY,
     status_id INT DEFAULT 1,
-    name VARCHAR(150) NOT NULL UNIQUE,
-    brand_type VARCHAR(50),
+    sys_name VARCHAR(100) UNIQUE NOT NULL,
+    name VARCHAR(150) NOT NULL,
+    info VARCHAR(255),
+    org_type VARCHAR(50),
     location_ref VARCHAR(30),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_organizations_name ON organizations(name);
+CREATE INDEX IF NOT EXISTS idx_organizations_location_ref ON organizations(location_ref);
+
+CREATE TABLE IF NOT EXISTS categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    status_id INT DEFAULT 1,
+    sys_name VARCHAR(50) UNIQUE,
+    name VARCHAR(150),
     info VARCHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE INDEX IF NOT EXISTS idx_brand_name ON brands(name);
-CREATE INDEX IF NOT EXISTS idx_brand_location_ref ON brands(location_ref);
+CREATE INDEX IF NOT EXISTS idx_category_name ON categories(name);
+CREATE INDEX IF NOT EXISTS idx_category_code ON categories(sys_name);
 
-CREATE TABLE IF NOT EXISTS categories (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS route_categories (
+    product_id INT,
+    category_id INT,
     status_id INT DEFAULT 1,
-    code VARCHAR(10) UNIQUE,
-    name VARCHAR(150),
-    parent_id INT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (parent_id) REFERENCES categories(id) ON DELETE SET NULL
-);
-
-CREATE INDEX IF NOT EXISTS idx_category_name ON categories(name);
-CREATE INDEX IF NOT EXISTS idx_category_code ON categories(code);
+    PRIMARY KEY (product_id, category_id),
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+)
 
 CREATE TABLE IF NOT EXISTS units (
     id INT AUTO_INCREMENT PRIMARY KEY,
     status_id INT DEFAULT 1,
-    name VARCHAR(20) NOT NULL UNIQUE,
+    name VARCHAR(20) NOT NULL,
     symbol VARCHAR(10),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -48,83 +59,55 @@ CREATE TABLE IF NOT EXISTS units (
 CREATE TABLE IF NOT EXISTS products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     status_id INT DEFAULT 1,
+    sys_name VARCHAR(255) UNIQUE NOT NULL, 
     name VARCHAR(255) NOT NULL,
     brand_id INT,
-    category_id INT,
     qty_value DECIMAL(10,3),
     unit_id INT,
     default_manufacturer_brand_id INT,
     default_budget_ref VARCHAR(30),
-    made_in VARCHAR(60),
-    info TEXT,
-    note TEXT,
+    info VARCHAR(255),
+    note VARCHAR(255),
     extra_data JSON,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (brand_id) REFERENCES brands(id) ON DELETE SET NULL,
-    FOREIGN KEY (default_manufacturer_brand_id) REFERENCES brands(id) ON DELETE SET NULL,
-    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL,
+    FOREIGN KEY (brand_id) REFERENCES organizations(id) ON DELETE SET NULL,
+    FOREIGN KEY (default_manufacturer_brand_id) REFERENCES organizations(id) ON DELETE SET NULL,
     FOREIGN KEY (unit_id) REFERENCES units(id) ON DELETE SET NULL
 );
 
 CREATE INDEX IF NOT EXISTS idx_product_name ON products(name);
-CREATE INDEX IF NOT EXISTS idx_product_category ON products(category_id);
 CREATE INDEX IF NOT EXISTS idx_product_brand ON products(brand_id);
 CREATE INDEX IF NOT EXISTS idx_product_default_manufacturer ON products(default_manufacturer_brand_id);
 CREATE INDEX IF NOT EXISTS idx_product_default_budget_ref ON products(default_budget_ref);
 
-CREATE TABLE IF NOT EXISTS product_category_links (
+CREATE TABLE IF NOT EXISTS identifier_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    value VARCHAR(100) UNIQUE NOT NULL,
+    name VARCHAR(255),
+    regex_pattern VARCHAR(255),
+    priority INT DEFAULT 0,
+    info VARCHAR(255),
     status_id INT DEFAULT 1,
-    product_id INT NOT NULL,
-    category_id INT NOT NULL,
-    relation_type VARCHAR(50) DEFAULT 'category',
-    is_primary BOOLEAN DEFAULT FALSE,
-    info TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
-    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
-    UNIQUE (product_id, category_id, relation_type)
+    created DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-
-CREATE INDEX IF NOT EXISTS idx_product_category_links_product ON product_category_links(product_id);
-CREATE INDEX IF NOT EXISTS idx_product_category_links_category ON product_category_links(category_id);
-
-CREATE TABLE IF NOT EXISTS product_manufacturers (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    status_id INT DEFAULT 1,
-    product_id INT NOT NULL,
-    brand_id INT NOT NULL,
-    manufacturer_role VARCHAR(50) DEFAULT 'manufacturer',
-    is_default BOOLEAN DEFAULT FALSE,
-    info TEXT,
-    note TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
-    FOREIGN KEY (brand_id) REFERENCES brands(id) ON DELETE CASCADE,
-    UNIQUE (product_id, brand_id, manufacturer_role)
-);
-
-CREATE INDEX IF NOT EXISTS idx_product_manufacturers_product ON product_manufacturers(product_id);
-CREATE INDEX IF NOT EXISTS idx_product_manufacturers_brand ON product_manufacturers(brand_id);
 
 CREATE TABLE IF NOT EXISTS product_identifiers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     status_id INT DEFAULT 1,
-    product_id INT NOT NULL,
-    identifier VARCHAR(50) NOT NULL,
-    type VARCHAR(20),
-    info TEXT,
+    product_id INT,
+    value VARCHAR(50) NOT NULL,
+    type_id INT,
+    info VARCHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
-    UNIQUE (identifier, type)
+    FOREIGN KEY(type_id) REFERENCES identifier_types(id),
+    FOREIGN KEY(product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS idx_identifier_product ON product_identifiers(product_id);
-CREATE INDEX IF NOT EXISTS idx_identifier_value ON product_identifiers(identifier);
+CREATE INDEX IF NOT EXISTS idx_identifier_value ON product_identifiers(value);
 
 CREATE TABLE IF NOT EXISTS product_prices (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -141,8 +124,8 @@ CREATE TABLE IF NOT EXISTS product_prices (
     document_ref VARCHAR(30),
     finance_ref VARCHAR(30),
     order_ref VARCHAR(30),
-    info TEXT,
-    note TEXT,
+    info VARCHAR(255),
+    note VARCHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
@@ -159,8 +142,8 @@ CREATE TABLE IF NOT EXISTS stock_locations (
     name VARCHAR(150) NOT NULL,
     parent_ref VARCHAR(30),
     location_ref VARCHAR(30),
-    info TEXT,
-    note TEXT,
+    info VARCHAR(255),
+    note VARCHAR(255),
     extra_data JSON,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -180,14 +163,14 @@ CREATE TABLE IF NOT EXISTS stock_items (
     measured_weight DECIMAL(12,3),
     weight_unit_id INT,
     condition_name VARCHAR(100),
-    info TEXT,
-    note TEXT,
+    info VARCHAR(255),
+    note VARCHAR(255),
     extra_data JSON,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
     FOREIGN KEY (stock_location_id) REFERENCES stock_locations(id) ON DELETE SET NULL,
-    FOREIGN KEY (manufacturer_brand_id) REFERENCES brands(id) ON DELETE SET NULL,
+    FOREIGN KEY (manufacturer_brand_id) REFERENCES organizations(id) ON DELETE SET NULL,
     FOREIGN KEY (quantity_unit_id) REFERENCES units(id) ON DELETE SET NULL,
     FOREIGN KEY (weight_unit_id) REFERENCES units(id) ON DELETE SET NULL
 );
@@ -205,7 +188,7 @@ CREATE TABLE IF NOT EXISTS stock_quantity_log (
     quantity_event_type VARCHAR(50) DEFAULT 'measurement',
     measured_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     source VARCHAR(50),
-    note TEXT,
+    note VARCHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (stock_item_id) REFERENCES stock_items(id) ON DELETE CASCADE,
@@ -223,7 +206,7 @@ CREATE TABLE IF NOT EXISTS stock_weight_log (
     weight_unit_id INT,
     measured_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     source VARCHAR(50),
-    note TEXT,
+    note VARCHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (stock_item_id) REFERENCES stock_items(id) ON DELETE CASCADE,
@@ -249,7 +232,7 @@ CREATE TABLE IF NOT EXISTS stock_movements (
     document_ref VARCHAR(30),
     finance_ref VARCHAR(30),
     reason VARCHAR(255),
-    note TEXT,
+    note VARCHAR(255),
     happened_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
