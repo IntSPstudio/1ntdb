@@ -1,0 +1,75 @@
+.header {
+  background: #11233b;
+  color: white;
+}
+
+body {
+  background: #f1f1f1;
+}
+
+body a {
+  text-decoration: none;
+}
+
+.topnav {
+  background-color: #20416c;
+}
+
+.topnav a {
+  color: white;
+}
+
+.topnav a:hover {
+  background-color: #FF8000;
+}
+
+.leftcolumn h1 {color: black;}
+.leftcolumn h3 {color: black;}
+
+.rightcolumn {
+  background-color: #f1f1f1;
+  color: black
+}
+.rightcolumn a, .rightcolumn h2 {
+  color: white;
+  background-color: #20416c;
+}
+.rightcolumn a:hover {
+  color: white;
+  background-color: #FF8000;
+}
+.content {
+  background-color: white;
+}
+.footer {
+  background: #20416c;
+  color: white
+}
+.footertexts a {
+  color: white;
+}
+.footertexts a:hover {
+  color: #FF8000;
+}
+.commander {
+  background: white;
+  color: black
+}
+.commander a {
+  color: black;
+}
+.commander a:hover {
+  color: #20416c;
+}
+.content a {
+  color: white;
+}
+.content a :hover {
+  color: #20416c;
+}
+.infocontent {
+  background-color: white;
+}
+
+.infocontent a {color: #20416c;}
+.infocontent a:hover {color:#FF8000;}

@@ -1,0 +1,49 @@
+* {
+    box-sizing: border-box;
+    text-decoration: none;
+}
+body {
+    font-family: Arial;
+    /*padding: 10px;*/
+}
+.topnav {
+    width: 100%;
+}
+.topnav h2 {
+    padding: 14px 16px;
+}
+.content {
+    padding: 10px 0px;
+}
+.content a{
+    padding: 10px 10px;
+}
+.largeinputfield {
+    width: 100%;
+    /*height: 55px;*/
+    resize: none;
+}
+.basictable {
+    width: 100%;
+    text-align: left;
+}
+.basictable th {
+    width: 33%;
+    height: 95px;
+}
+.basictable h1, h3 {
+    text-align: center;
+}
+.basictable p {
+    margin-left: 10px;
+}
+.tablesheets table {
+    width: 100%;
+}
+
+.tablesheets th {
+    padding: 5px 5px;
+}
+.tablesheets th, .tablesheets td, .tablesheets tr {
+    width: 10%;
+}
