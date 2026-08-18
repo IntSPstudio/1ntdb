@@ -31,9 +31,6 @@ INSERT INTO location_groups (name) VALUES
 ('family'),
 ('friends'),
 ('restaurants'),
-('lidl-group'),
-('k-group'),
-('s-group'),
 ('main'),
 ('other')
 ON DUPLICATE KEY UPDATE name = VALUES(name);
