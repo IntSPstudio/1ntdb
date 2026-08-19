@@ -27,18 +27,39 @@ ID: 220003001
   </div>
   <div class="row">
     <div class="leftcolumn">
-      <div class="content" style="white-space:unset; height: 410px;">
-        <iframe id="contentframe" class="loggerframe" src="subhtml/logger/mainmenu.html" frameborder="0">
-        </iframe>
+      <div class="content" style="white-space:unset;">
+        <h1>Main</h1>
+          <table style="text-align: left;">
+            <tr>
+              <th><label for="loggroup"><b>Group</b></label></th>
+              <th><input type="text" placeholder="Event group" name="loggroup"></th>
+            </tr>
+            <tr>
+              <th><label for="tid"><b>Target</b></label></th>
+              <th><input type="text" placeholder="Enter id or group" name="tid"></th>
+            </tr>
+            <tr>
+              <th><label for="did"><b>Destination</b></label></th>
+              <th><input type="text" placeholder="Enter id or group" name="did"></th>
+            </tr>
+          </table>
+        <div class="content">
+          <label for="logcontent"><b>Event</b></label>
+          <br>
+          <textarea id="text" class ="largeinputfield" name="text"></textarea>
+        </div>
+        <p id="datetime" style="text-align: right;"></p>
+        <script src="resources/js/currentdatetime.js">
+        </script>
       </div>
     </div>
     <div class="rightcolumn">
       <div class="content">
         <h2>Menu</h2>
-        <a href="#" class="rightcolumnlinks">Main</a>
-        <a href="#" class="rightcolumnlinks">Task</a>
-        <a href="#" class="rightcolumnlinks">List</a>
-        <a href="#" class="rightcolumnlinks">Note</a>
+        <a href="logger.html" class="rightcolumnlinks">Main</a>
+        <a href="logger_addtask.html" class="rightcolumnlinks">Task</a>
+        <a href="logger_addlist.html" class="rightcolumnlinks">List</a>
+        <a href="logger_addnote.html" class="rightcolumnlinks">Note</a>
       </div>
     </div>
   </div>

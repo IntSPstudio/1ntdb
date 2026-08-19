@@ -115,3 +115,32 @@ body {
   padding: 5px;
   width: 100%; 
 }
+
+
+
+
+
+.basictable {
+    width: 100%;
+    text-align: left;
+}
+.basictable th {
+    width: 33%;
+    height: 95px;
+}
+.basictable h1, h3 {
+    text-align: center;
+}
+.basictable p {
+    margin-left: 10px;
+}
+.tablesheets table {
+    width: 100%;
+}
+
+.tablesheets th {
+    padding: 5px 5px;
+}
+.tablesheets th, .tablesheets td, .tablesheets tr {
+    width: 10%;
+}
